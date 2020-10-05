@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <SFML/Graphics.h>
 
 typedef enum { BMP, JPG, TIFF, PNG } Formato;
 typedef enum { ARIAL, TIMES_NEW_ROMAN, HEVATICA} TipoLetra;
