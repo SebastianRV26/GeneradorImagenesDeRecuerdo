@@ -60,5 +60,4 @@ CMakeFiles/Proyecto1Lenguajes.dir/main.c.obj: C:/mingw-w64/i686-8.1.0-posix-dwar
 CMakeFiles/Proyecto1Lenguajes.dir/main.c.obj: C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/SFML/Window/Window.h
 CMakeFiles/Proyecto1Lenguajes.dir/main.c.obj: C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/SFML/Window/WindowHandle.h
 CMakeFiles/Proyecto1Lenguajes.dir/main.c.obj: C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/stb_image_resize.h
-CMakeFiles/Proyecto1Lenguajes.dir/main.c.obj: C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/stb_image_write.h
 

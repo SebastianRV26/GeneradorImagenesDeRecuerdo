@@ -14,7 +14,7 @@ typedef enum { ARIAL, TIMES_NEW_ROMAN, HEVATICA} TipoLetra;
 
 /// Variables globales.
 char *root = "C:\\Users\\Usuario\\Downloads\\";
-
+unsigned int width, height;
 
 /**
  * 1. Carga de imagenes en los formatos: JPG, TIFF y PNG.
@@ -24,23 +24,26 @@ char *root = "C:\\Users\\Usuario\\Downloads\\";
  * @param path: ruta, nombre y extención de la imagen
  * @return image (sfImage) imagen a utilizar.
  */
-sfImage *cargarFoto(char *path){
+sfImage *loadImage(char *path){
     sfImage* image = NULL;
     image = sfImage_createFromFile(path);
     sfVector2u size = sfImage_getSize(image);
 
-    int minSize = 700;
+    width = size.x;
+    height = size.y;
+
+    int minSize = 500;
     int maxXSize = 1200;
     int maxYSize = 1200;
+    printf("\nSizex: %i, sizey: %i", width, height);
 
-    if (size.x < minSize || size.y < minSize){
-        printf("Imagen demaciado pequeña");
+    if (width < minSize || height < minSize){
+        printf("\nImagen demaciado pequennia");
         return NULL;
-    } else if (size.x > maxXSize || size.y > maxYSize) {
+    } else if (width > maxXSize || height > maxYSize) {
         // hacerle resize
-        printf("Hacer Resize");
+        printf("\nHacer Resize");
     }
-    printf("Sizex: %i, sizey: %i", size.x, size.y);
     // reajustar imagen o rechazarlo
     return image;
 }
@@ -55,9 +58,9 @@ sfImage *cargarFoto(char *path){
  */
 void pedirTipos(){
     // pedir Tipos de letra y tamaños de letra
-    printf("Escoja el Tipo de letra: ");
+    printf("\nEscoja el Tipo de letra: ");
 
-    printf("Escoja el tamaño de la letra: ");
+    printf("\nEscoja el tamaño de la letra: ");
 }
 
 /**
@@ -67,10 +70,18 @@ void pedirTipos(){
  * ende no se colocará nada en la imagen). Debe recortarse o restringirse la
  * cantidad de texto en función de las dimensiones de la imagen.
  */
-void pedirTexto(){
-    printf("Ingrese el texto de arriba de la imagen: ");
+void setText(char *text1, char *text2){
+    // Se crean los objetos de tipo texto y se setean su contenido
+    sfText* textoArriba = sfText_create();
+    sfText* textoDebajo = sfText_create();
+    sfText_setString(textoArriba, text1);
+    sfText_setString(textoDebajo, text2);
 
-    printf("Ingrese el texto de abajo de la imagen: ");
+    sfTexture* *texture = sfTexture_create(width, height); // textura
+    sfSprite *sprite = sfSprite_create(); // sprite
+
+    // Depende, yo la uso porque al sprite no se le puede meter image, asi que dentro
+    // del textura le meto la imagen, ya el sprite si acepta texture
 }
 
 /**
@@ -78,19 +89,37 @@ void pedirTexto(){
  * formato de la imagen de entrada o alguno otro disponible) utilizando el nombre
  * que el usuario indique y la extensión o solicitada o definida por el
  * programador.
+ *
+ * @param image imagen a guardar.
+ * @param path ruta a guarar la imagen.
  */
-void guardarImagen(){
-    printf("Indique el nombre de la imagen: ");
+void saveImage(struct sfImage *image, char *path){
+    printf("\nIndique la ruta, el nombre y la extencion de la imagen: ");
+
+    sfImage_saveToFile(image, path);
+    printf("\nImagen guardada correctamente");
 }
 
 int main() {
     printf("Hello, World!\n");
     printf("Ingrese la ruta de la imagen (aceptamos jpg, png)");
 
-    sfImage *image = cargarFoto("C:\\Users\\Usuario\\Downloads\\ide.png");
+    // Paso 1
+    sfImage *image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs2.jpg");
     if(image == NULL){
         return -1;
     }
+
+    // Paso 2
+
+    // Paso 3
+    //printf("\nIngrese el texto de arriba de la imagen: ");
+
+    //printf("\nIngrese el texto de abajo de la imagen: ");
+    setText("Meme", "Tenemos");
+
+    // Paso 4
+    saveImage(image, "C:\\Users\\Usuario\\Downloads\\output.png");
 
     return 0;
 }

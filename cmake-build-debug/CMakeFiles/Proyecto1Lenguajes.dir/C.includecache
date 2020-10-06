@@ -13,8 +13,6 @@ string.h
 -
 stb_image_resize.h
 -
-stb_image_write.h
--
 SFML/Graphics.h
 -
 
@@ -610,21 +608,5 @@ string.h
 math.h
 -
 stdlib.h
--
-
-C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/stb_image_write.h
-stdlib.h
--
-stdio.h
--
-stdarg.h
--
-stdlib.h
--
-string.h
--
-math.h
--
-assert.h
 -
 
