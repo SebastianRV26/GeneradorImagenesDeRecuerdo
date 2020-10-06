@@ -1,30 +1,48 @@
 #include <stdio.h>
+#include <string.h>
+#include <stb_image_resize.h>
 #include <SFML/Graphics.h>
+
+/**
+ * @author Sebastian Rojas Vargas.
+ * Compilador: MinGW 32 bits.
+ */
 
 typedef enum { BMP, JPG, TIFF, PNG } Formato;
 typedef enum { ARIAL, TIMES_NEW_ROMAN, HEVATICA} TipoLetra;
 //typedef enum { 12, JPG, TIFF, PNG } TamañoLetra;
 
+/// Variables globales.
+char *root = "C:\\Users\\Usuario\\Downloads\\";
+
+
 /**
- * 1. Carga de fotografías al menos en tres formatos a escoger entre BMP, JPG,
- * TIFF y PNG. Esta carga debe realizarse recibiendo de parámetro la ruta de
- * acceso a la imagen en el disco duro para que se permita cargar cualquier
- * imagen que se requiera. Se debe restringir al leer la imagen que tenga al
- * menos una resolución mínima que defina el programador y que si la imagen es
- * más grande que una resolución máxima también definida por el programador,
- * esta se pueda re ajustar a dichas dimensiones.
+ * 1. Carga de imagenes en los formatos: JPG, TIFF y PNG.
+ * Resolución mínima:
+ * Resolución máxima:
+ * Resize si pasa la resolución:
+ * @param path: ruta, nombre y extención de la imagen
+ * @return image (sfImage) imagen a utilizar.
  */
+sfImage *cargarFoto(char *path){
+    sfImage* image = NULL;
+    image = sfImage_createFromFile(path);
+    sfVector2u size = sfImage_getSize(image);
 
-void cargarFoto(){
-    char *ruta = "";
-    printf("Escoja el formato: ");
+    int minSize = 700;
+    int maxXSize = 1200;
+    int maxYSize = 1200;
 
-    // resolución mínima: (rechazarlo si es muy pequeña)
-
-    // resolución máxima:
-
+    if (size.x < minSize || size.y < minSize){
+        printf("Imagen demaciado pequeña");
+        return NULL;
+    } else if (size.x > maxXSize || size.y > maxYSize) {
+        // hacerle resize
+        printf("Hacer Resize");
+    }
+    printf("Sizex: %i, sizey: %i", size.x, size.y);
     // reajustar imagen o rechazarlo
-
+    return image;
 }
 
 /**
@@ -66,8 +84,13 @@ void guardarImagen(){
 }
 
 int main() {
-    //printf("Hello, World!\n");
-    cargarFoto();
+    printf("Hello, World!\n");
+    printf("Ingrese la ruta de la imagen (aceptamos jpg, png)");
+
+    sfImage *image = cargarFoto("C:\\Users\\Usuario\\Downloads\\ide.png");
+    if(image == NULL){
+        return -1;
+    }
 
     return 0;
 }
