@@ -11,6 +11,8 @@ stdio.h
 -
 string.h
 -
+stdlib.h
+-
 stb_image_resize.h
 -
 SFML/Graphics.h

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <stb_image_resize.h>
 #include <SFML/Graphics.h>
 
@@ -14,7 +15,8 @@ typedef enum { ARIAL, TIMES_NEW_ROMAN, HEVATICA} TipoLetra;
 
 /// Variables globales.
 char *root = "C:\\Users\\Usuario\\Downloads\\";
-unsigned int width, height;
+unsigned int width, height, sizeText;
+char *typeFont;
 
 /**
  * 1. Carga de imagenes en los formatos: JPG, TIFF y PNG.
@@ -41,47 +43,11 @@ sfImage *loadImage(char *path){
         printf("\nImagen demaciado pequennia");
         return NULL;
     } else if (width > maxXSize || height > maxYSize) {
-        // hacerle resize
+        /// hacerle resize
         printf("\nHacer Resize");
     }
-    // reajustar imagen o rechazarlo
+    /// reajustar imagen o rechazarlo
     return image;
-}
-
-/**
- * 2. Personalización del texto a “empotrar” en la imagen por parte del usuario.
- * Tipos de letra entre una cantidad finita definida y tamaños también entre
- * algunos definidos. Se pueden utilizar índices para mayor facilidad de lectura
- * y parametrización. Por ejemplo, hipotéticamente, el tipo de letra 3 y el
- * tamaño 4. El programador deberá saber cual es el tipo de letra indexado por
- * el 3 y el tamaño indexado con el 4.
- */
-void pedirTipos(){
-    // pedir Tipos de letra y tamaños de letra
-    printf("\nEscoja el Tipo de letra: ");
-
-    printf("\nEscoja el tamaño de la letra: ");
-}
-
-/**
- * 3. Posición y ajuste del texto en la imagen. El texto puede colocarse arriba,
- * abajo o en ambas partes al mismo tiempo (implica que se pueden recibir no uno
- * si no dos textos perfectamente… cualquiera de los dos puede venir vacío y por
- * ende no se colocará nada en la imagen). Debe recortarse o restringirse la
- * cantidad de texto en función de las dimensiones de la imagen.
- */
-void setText(char *text1, char *text2){
-    // Se crean los objetos de tipo texto y se setean su contenido
-    sfText* textoArriba = sfText_create();
-    sfText* textoDebajo = sfText_create();
-    sfText_setString(textoArriba, text1);
-    sfText_setString(textoDebajo, text2);
-
-    sfTexture* *texture = sfTexture_create(width, height); // textura
-    sfSprite *sprite = sfSprite_create(); // sprite
-
-    // Depende, yo la uso porque al sprite no se le puede meter image, asi que dentro
-    // del textura le meto la imagen, ya el sprite si acepta texture
 }
 
 /**
@@ -94,32 +60,98 @@ void setText(char *text1, char *text2){
  * @param path ruta a guarar la imagen.
  */
 void saveImage(struct sfImage *image, char *path){
-    printf("\nIndique la ruta, el nombre y la extencion de la imagen: ");
-
     sfImage_saveToFile(image, path);
     printf("\nImagen guardada correctamente");
 }
 
+/**
+ * 2. Personalización del texto a “empotrar” en la imagen por parte del usuario.
+ * Tipos de letra entre una cantidad finita definida y tamaños también entre
+ * algunos definidos. Se pueden utilizar índices para mayor facilidad de lectura
+ * y parametrización. Por ejemplo, hipotéticamente, el tipo de letra 3 y el
+ * tamaño 4. El programador deberá saber cual es el tipo de letra indexado por
+ * el 3 y el tamaño indexado con el 4.
+ * @param sizeTextP 0 pequeño, 1 grande.
+ * @param typeText 0 Arial, 1 Times New Roman.
+ */
+void setTypes(int sizeTextP, int typeText){
+    if (sizeTextP == 0){
+        sizeText = 30;
+    } else if (sizeText == 1){
+        sizeText = 50;
+    }
+    typeFont = (char*)malloc(1);
+    if (typeText == 0){
+        printf("1");
+        strcpy(typeFont, "C:\\Users\\Usuario\\Downloads\\fonts\\arial.ttf");
+        printf("2");
+    } else if (typeText == 1){
+        printf("1");
+        strcpy(typeFont, "C:\\Users\\Usuario\\Downloads\\fonts\\times.ttf");
+        printf("2");
+    }
+}
+
+/**
+ * 3. Posición y ajuste del texto en la imagen. El texto puede colocarse arriba,
+ * abajo o en ambas partes al mismo tiempo (implica que se pueden recibir no uno
+ * si no dos textos perfectamente… cualquiera de los dos puede venir vacío y por
+ * ende no se colocará nada en la imagen). Debe recortarse o restringirse la
+ * cantidad de texto en función de las dimensiones de la imagen.
+ */
+void setText(char *text1, char *text2, struct sfImage *image){
+    /// Se crean los objetos de tipo texto y se setean su contenido
+    sfText* textoArriba = sfText_create();
+    sfText* textoDebajo = sfText_create();
+    sfText_setString(textoArriba, text1);
+    sfText_setString(textoDebajo, text2);
+
+    sfTexture *texture = sfTexture_createFromImage(image, NULL); // textura
+    sfSprite *sprite = sfSprite_create(); // sprite
+
+    /// Establecer la posición de un sprite
+    //sfVector2f position = sfSprite_getPosition(sprite);
+    //sfSprite_setPosition(sprite, position);
+    
+    /// Cambiar la textura de origen de un objeto
+    sfSprite_setTexture(sprite, texture, sfTrue);
+
+    printf("\n font %s", typeFont);
+    sfFont * font = sfFont_createFromFile("C:\\Users\\Usuario\\Downloads\\fonts\\times.ttf"); //typeFont
+    sfText_setCharacterSize(textoArriba, 50);
+    sfText_setFont(textoArriba, font);
+
+    sfRenderTexture *renderTexture = sfRenderTexture_create(width, height, sfTrue);
+    sfRenderTexture_drawSprite(renderTexture, sprite,NULL);
+    sfRenderTexture_drawText(renderTexture, textoArriba,NULL);
+    sfTexture *pTexture = sfRenderTexture_getTexture(renderTexture);
+
+    sfImage *ima = sfTexture_copyToImage(pTexture);
+    sfImage_flipVertically(ima);
+    saveImage(ima, "C:\\Users\\Usuario\\Downloads\\output.png");
+
+}
+
 int main() {
     printf("Hello, World!\n");
-    printf("Ingrese la ruta de la imagen (aceptamos jpg, png)");
 
-    // Paso 1
+    /// Paso 1
     sfImage *image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs2.jpg");
     if(image == NULL){
         return -1;
     }
 
-    // Paso 2
+    /// Paso 2
+    //setTypes(0, 0);
 
-    // Paso 3
+    /// Paso 3
     //printf("\nIngrese el texto de arriba de la imagen: ");
 
     //printf("\nIngrese el texto de abajo de la imagen: ");
-    setText("Meme", "Tenemos");
+    setText("Meme", "Tenemos", image);
 
-    // Paso 4
-    saveImage(image, "C:\\Users\\Usuario\\Downloads\\output.png");
+    /// Paso 4
+    //saveImage(image, "C:\\Users\\Usuario\\Downloads\\output.png");
 
     return 0;
 }
