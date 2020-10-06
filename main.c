@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <stb_image_resize.h>
 #include <SFML/Graphics.h>
+#include <malloc.h>
+#include <mem.h>
+#include <conio.h>
+#include <ctype.h>
 
 /**
  * @author Sebastian Rojas Vargas.
@@ -15,8 +19,9 @@ typedef enum { ARIAL, TIMES_NEW_ROMAN, HEVATICA} TipoLetra;
 
 /// Variables globales.
 char *root = "C:\\Users\\Usuario\\Downloads\\";
-unsigned int width, height, sizeText;
+unsigned int width, height;
 char *typeFont;
+unsigned int sizeText;
 
 /**
  * 1. Carga de imagenes en los formatos: JPG, TIFF y PNG.
@@ -76,11 +81,11 @@ void saveImage(struct sfImage *image, char *path){
  */
 void setTypes(int sizeTextP, int typeText){
     if (sizeTextP == 0){
-        sizeText = 30;
+        sizeText = height/20;
     } else if (sizeText == 1){
-        sizeText = 50;
+        sizeText = height/20;
     }
-    typeFont = (char*)malloc(1);
+    /*typeFont = (char*)malloc(1);
     if (typeText == 0){
         printf("1");
         strcpy(typeFont, "C:\\Users\\Usuario\\Downloads\\fonts\\arial.ttf");
@@ -89,7 +94,7 @@ void setTypes(int sizeTextP, int typeText){
         printf("1");
         strcpy(typeFont, "C:\\Users\\Usuario\\Downloads\\fonts\\times.ttf");
         printf("2");
-    }
+    }*/
 }
 
 /**
@@ -109,22 +114,27 @@ void setText(char *text1, char *text2, struct sfImage *image){
     sfTexture *texture = sfTexture_createFromImage(image, NULL); // textura
     sfSprite *sprite = sfSprite_create(); // sprite
 
-    /// Establecer la posición de un sprite
-    //sfVector2f position = sfSprite_getPosition(sprite);
-    //sfSprite_setPosition(sprite, position);
-    
+    // (width/(strlen(text1)*0.2))
+    /// Establecer la posición del textp
+    sfVector2f position1 = {200, 10}; // si el texto es muy largo se corta
+    sfVector2f position2 = {200, height-(height/12)}; // si el texto es muy largo se corta
+    sfText_setPosition(textoArriba, position1);
+    sfText_setPosition(textoDebajo, position2);
     /// Cambiar la textura de origen de un objeto
     sfSprite_setTexture(sprite, texture, sfTrue);
 
     printf("\n font %s", typeFont);
     sfFont * font = sfFont_createFromFile("C:\\Users\\Usuario\\Downloads\\fonts\\times.ttf"); //typeFont
-    sfText_setCharacterSize(textoArriba, 50);
+    sfText_setCharacterSize(textoArriba, sizeText);
     sfText_setFont(textoArriba, font);
+    sfText_setCharacterSize(textoDebajo, sizeText);
+    sfText_setFont(textoDebajo, font);
 
     sfRenderTexture *renderTexture = sfRenderTexture_create(width, height, sfTrue);
     sfRenderTexture_drawSprite(renderTexture, sprite,NULL);
     sfRenderTexture_drawText(renderTexture, textoArriba,NULL);
-    sfTexture *pTexture = sfRenderTexture_getTexture(renderTexture);
+    sfRenderTexture_drawText(renderTexture, textoDebajo,NULL);
+    const sfTexture *pTexture = sfRenderTexture_getTexture(renderTexture);
 
     sfImage *ima = sfTexture_copyToImage(pTexture);
     sfImage_flipVertically(ima);
@@ -136,19 +146,19 @@ int main() {
     printf("Hello, World!\n");
 
     /// Paso 1
-    sfImage *image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs2.jpg");
+    sfImage *image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs.jpg");
     if(image == NULL){
         return -1;
     }
 
     /// Paso 2
-    //setTypes(0, 0);
+    setTypes(0, 0);
 
     /// Paso 3
     //printf("\nIngrese el texto de arriba de la imagen: ");
 
     //printf("\nIngrese el texto de abajo de la imagen: ");
-    setText("Meme", "Tenemos", image);
+    setText("Memelandia", "Tenemos", image);
 
     /// Paso 4
     //saveImage(image, "C:\\Users\\Usuario\\Downloads\\output.png");

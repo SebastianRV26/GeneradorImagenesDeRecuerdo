@@ -17,6 +17,14 @@ stb_image_resize.h
 -
 SFML/Graphics.h
 -
+malloc.h
+-
+mem.h
+-
+conio.h
+-
+ctype.h
+-
 
 C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/SFML/Config.h
 
