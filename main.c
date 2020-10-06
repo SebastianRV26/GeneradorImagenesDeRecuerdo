@@ -14,17 +14,15 @@
  */
 
 typedef enum { BMP, JPG, TIFF, PNG } Formato;
-typedef enum { ARIAL, TIMES_NEW_ROMAN, HEVATICA} TipoLetra;
-//typedef enum { 12, JPG, TIFF, PNG } TamañoLetra;
 
 /// Variables globales.
-char *root = "C:\\Users\\Usuario\\Downloads\\";
 unsigned int width, height;
-char *typeFont;
 unsigned int sizeText;
+unsigned int size;
 
 /**
  * 1. Carga de imagenes en los formatos: JPG, TIFF y PNG.
+ *
  * Resolución mínima:
  * Resolución máxima:
  * Resize si pasa la resolución:
@@ -51,18 +49,14 @@ sfImage *loadImage(char *path){
         /// hacerle resize
         printf("\nHacer Resize");
     }
-    /// reajustar imagen o rechazarlo
     return image;
 }
 
 /**
- * 4. Almacenamiento en memoria de la postal en formato de imagen (sea el mismo
- * formato de la imagen de entrada o alguno otro disponible) utilizando el nombre
- * que el usuario indique y la extensión o solicitada o definida por el
- * programador.
+ * 4. Almacenamiento en memoria de la imagen.
  *
- * @param image imagen a guardar.
- * @param path ruta a guarar la imagen.
+ * @param image: imagen a guardar.
+ * @param path: ruta, nombre y extención de la imagen a guarar.
  */
 void saveImage(struct sfImage *image, char *path){
     sfImage_saveToFile(image, path);
@@ -77,24 +71,26 @@ void saveImage(struct sfImage *image, char *path){
  * tamaño 4. El programador deberá saber cual es el tipo de letra indexado por
  * el 3 y el tamaño indexado con el 4.
  * @param sizeTextP 0 pequeño, 1 grande.
- * @param typeText 0 Arial, 1 Times New Roman.
+ * @param typeText 0 Arial, 1 Times New Roman, 2 Nirvana.
  */
-void setTypes(int sizeTextP, int typeText){
+char* setTypes(int sizeTextP, int typeText){
+    size = sizeTextP;
     if (sizeTextP == 0){
-        sizeText = height/20;
-    } else if (sizeText == 1){
-        sizeText = height/20;
+        printf("\nUsted escogio letra pequenniaa");
+        sizeText = height/15;
+    } else if (sizeTextP == 1){
+        printf("\nUsted escogio letra grande");
+        sizeText = height/10;
     }
-    /*typeFont = (char*)malloc(1);
-    if (typeText == 0){
-        printf("1");
-        strcpy(typeFont, "C:\\Users\\Usuario\\Downloads\\fonts\\arial.ttf");
-        printf("2");
-    } else if (typeText == 1){
-        printf("1");
-        strcpy(typeFont, "C:\\Users\\Usuario\\Downloads\\fonts\\times.ttf");
-        printf("2");
-    }*/
+    if (typeText == 1){
+        printf("\nUsted escogio Times New Roman");
+        return "C:\\Users\\Usuario\\Downloads\\fonts\\times.ttf";
+    } else if (typeText == 2){
+        printf("\nUsted escogio Nirvana");
+        return "C:\\Users\\Usuario\\Downloads\\fonts\\NIRVANA.TTF";
+    }
+    printf("\nUsted escogio Arial");
+    return "C:\\Users\\Usuario\\Downloads\\fonts\\arial.ttf";
 }
 
 /**
@@ -104,7 +100,7 @@ void setTypes(int sizeTextP, int typeText){
  * ende no se colocará nada en la imagen). Debe recortarse o restringirse la
  * cantidad de texto en función de las dimensiones de la imagen.
  */
-void setText(char *text1, char *text2, struct sfImage *image){
+void setText(char *text1, char *text2, struct sfImage *image, char *typeFont){
     /// Se crean los objetos de tipo texto y se setean su contenido
     sfText* textoArriba = sfText_create();
     sfText* textoDebajo = sfText_create();
@@ -117,14 +113,18 @@ void setText(char *text1, char *text2, struct sfImage *image){
     // (width/(strlen(text1)*0.2))
     /// Establecer la posición del textp
     sfVector2f position1 = {200, 10}; // si el texto es muy largo se corta
-    sfVector2f position2 = {200, height-(height/12)}; // si el texto es muy largo se corta
+    int pos = height-(height/12);
+    if (size == 1){
+        pos = height-(height/8);
+    }
+    sfVector2f position2 = {200, pos}; // si el texto es muy largo se corta
     sfText_setPosition(textoArriba, position1);
     sfText_setPosition(textoDebajo, position2);
     /// Cambiar la textura de origen de un objeto
     sfSprite_setTexture(sprite, texture, sfTrue);
 
     printf("\n font %s", typeFont);
-    sfFont * font = sfFont_createFromFile("C:\\Users\\Usuario\\Downloads\\fonts\\times.ttf"); //typeFont
+    sfFont * font = sfFont_createFromFile(typeFont); //typeFont
     sfText_setCharacterSize(textoArriba, sizeText);
     sfText_setFont(textoArriba, font);
     sfText_setCharacterSize(textoDebajo, sizeText);
@@ -143,23 +143,12 @@ void setText(char *text1, char *text2, struct sfImage *image){
 }
 
 int main() {
-    printf("Hello, World!\n");
-
     /// Paso 1
     sfImage *image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs.jpg");
-    if(image == NULL){
-        return -1;
-    }
-
     /// Paso 2
-    setTypes(0, 0);
-
+    char *typeFont = setTypes(1, 1);
     /// Paso 3
-    //printf("\nIngrese el texto de arriba de la imagen: ");
-
-    //printf("\nIngrese el texto de abajo de la imagen: ");
-    setText("Memelandia", "Tenemos", image);
-
+    setText("Memelandia", "Tenemos", image, typeFont);
     /// Paso 4
     //saveImage(image, "C:\\Users\\Usuario\\Downloads\\output.png");
 
