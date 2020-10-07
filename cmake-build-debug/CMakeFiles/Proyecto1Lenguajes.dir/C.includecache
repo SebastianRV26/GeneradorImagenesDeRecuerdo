@@ -9,21 +9,7 @@
 C:/Users/Usuario/CLionProjects/Proyecto1Lenguajes/main.c
 stdio.h
 -
-string.h
--
-stdlib.h
--
-stb_image_resize.h
--
 SFML/Graphics.h
--
-malloc.h
--
-mem.h
--
-conio.h
--
-ctype.h
 -
 
 C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/SFML/Config.h
@@ -604,19 +590,5 @@ SFML/System/Vector2.h
 
 C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/SFML/Window/WindowHandle.h
 SFML/Window/Export.h
--
-
-C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/stb_image_resize.h
-stb_image_resize.h
-C:/mingw-w64/i686-8.1.0-posix-dwarf-rt_v6-rev0/mingw32/include/stb_image_resize.h
-stdint.h
--
-assert.h
--
-string.h
--
-math.h
--
-stdlib.h
 -
 
