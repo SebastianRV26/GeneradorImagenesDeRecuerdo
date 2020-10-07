@@ -11,6 +11,9 @@
 /**
  * @author Sebastian Rojas Vargas.
  * Compilador: MinGW 32 bits.
+ * Librerías externas:
+ * SFML (v2.5.1) https://www.sfml-dev.org/download.php (GCC 7.3.0 MinGW (DW2) - 32-bit)
+ * CSFML https://www.sfml-dev.org/download/csfml/ (GCC - 32-bit)
  */
 
 typedef enum { BMP, JPG, TIFF, PNG } Formato;
@@ -19,6 +22,7 @@ typedef enum { BMP, JPG, TIFF, PNG } Formato;
 unsigned int width, height;
 unsigned int sizeText;
 unsigned int size;
+int flag = 0;
 
 /**
  * Reajuste de la imagem.
@@ -35,8 +39,6 @@ sfImage* resize(sfImage *originalImage){
     width = (int)newSize.width;
     height = (int)newSize.height;
 
-    printf("\nSizex: %i, sizey: %i", width, height);
-
     sfRenderTexture *renderTexture = sfRenderTexture_create(width, height, sfTrue);
     sfRenderTexture_drawSprite(renderTexture, sprite,NULL);
     const sfTexture *pTexture = sfRenderTexture_getTexture(renderTexture);
@@ -48,8 +50,8 @@ sfImage* resize(sfImage *originalImage){
 /**
  * 1. Carga de imagenes en los formatos: JPG, TIFF y PNG.
  *
- * Resolución mínima: 500.
- * Resolución máxima: 2000.
+ * Resolución mínima: 400.
+ * Resolución máxima: 1000.
  * Resize si pasa la resolución:
  * @param path: ruta, nombre y extención de la imagen
  * @return image (sfImage) imagen a utilizar.
@@ -62,15 +64,16 @@ sfImage *loadImage(char *path){
     width = sizes.x;
     height = sizes.y;
 
-    int minSize = 300; /// 500
+    int minSize = 400;
     int maxSize = 1000;
     printf("\nDimensiones de la imagen original: largo: %i, altura: %i", width, height);
-
+    flag = 1;
     if (width < minSize || height < minSize){
         printf("\nImagen demaciado pequennia");
+        flag = 0;
         return NULL;
     } else if (width > maxSize || height > maxSize) {
-        printf("\nSe hizo un reajuse de dimensiones a %ix%i", width, height);
+        printf("\nSe hizo un reajuse de dimensiones a %ix%i", maxSize, maxSize);
         return resize(image);
     }
     return image;
@@ -83,8 +86,10 @@ sfImage *loadImage(char *path){
  * @param path: ruta, nombre y extención de la imagen a guarar.
  */
 void saveImage(struct sfImage *image, char *path){
-    sfImage_saveToFile(image, path);
-    printf("\nImagen guardada correctamente");
+    if (image != NULL) {
+        sfImage_saveToFile(image, path);
+        printf("\nImagen guardada correctamente");
+    }
 }
 
 /**
@@ -98,6 +103,9 @@ void saveImage(struct sfImage *image, char *path){
  * @param typeText 0 Arial, 1 Times New Roman, 2 Nirvana.
  */
 char* setTypes(int sizeTextP, int typeText){
+    if (flag == 0){
+        return NULL;
+    }
     size = sizeTextP;
     if (sizeTextP == 0){
         printf("\nUsted escogio letra pequenniaa");
@@ -126,7 +134,10 @@ char* setTypes(int sizeTextP, int typeText){
  *
  * @param color 0 blanco, 1 negro
  */
-void setText(char *text1, char *text2, struct sfImage *image, char *typeFont, int color){
+sfImage *setText(char *text1, char *text2, struct sfImage *image, char *typeFont, int color){
+    if (flag == 0){
+        return NULL;
+    }
     /// Se crean los objetos de tipo texto y se setean su contenido
     sfText* textoArriba = sfText_create();
     sfText* textoDebajo = sfText_create();
@@ -167,16 +178,58 @@ void setText(char *text1, char *text2, struct sfImage *image, char *typeFont, in
 
     sfImage *imageWithText = sfTexture_copyToImage(pTexture);
     sfImage_flipVertically(imageWithText);
-    saveImage(imageWithText, "C:\\Users\\Usuario\\Downloads\\output.png");
+    //saveImage(imageWithText, "C:\\Users\\Usuario\\Downloads\\output.png");
+    return imageWithText;
 }
 
 int main() {
+    printf("\n//////////////////////////////////////////////////////////////////");
+    printf("\n\tPrueba 0 con imagen muy pequennia");
     /// Paso 1
-    sfImage *image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs.jpg");
+    sfImage *image = loadImage("C:\\Users\\Usuario\\Downloads\\bill.jpg");
     /// Paso 2
     char *typeFont = setTypes(0, 0);
     /// Paso 3
-    setText("Memelandia", "Tenemos", image, typeFont, 1);
+    image = setText("Memelandia", "Tenemos", image, typeFont, 1);
+    /// Paso 4
+    saveImage(image, "C:\\Users\\Usuario\\Downloads\\output0.png");
+
+
+    printf("\n\n//////////////////////////////////////////////////////////////////");
+    printf("\n\tPrueba 1 - texto: Arial tamannio pequennio color blanco");
+    /// Paso 1
+    image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs.jpg");
+    /// Paso 2
+    typeFont = setTypes(0, 0);
+    /// Paso 3
+    image = setText("Bugs Bunny", "Tenemos", image, typeFont, 0);
+    /// Paso 4
+    saveImage(image, "C:\\Users\\Usuario\\Downloads\\output1.png");
+
+
+    printf("\n\n//////////////////////////////////////////////////////////////////");
+    printf("\n\tPrueba 2 - texto: Times New Roman tamannio grande color negro");
+    /// Paso 1
+    image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs2.jpg");
+    /// Paso 2
+    typeFont = setTypes(1, 1);
+    /// Paso 3
+    image = setText("Bugs Bunny", "Tenemos", image, typeFont, 1);
+    /// Paso 4
+    saveImage(image, "C:\\Users\\Usuario\\Downloads\\output2.png");
+
+
+    printf("\n\n//////////////////////////////////////////////////////////////////");
+    printf("\n\tPrueba 3 - texto: Arial tamannio grande, mucho texto");
+    /// Paso 1
+    image = loadImage("C:\\Users\\Usuario\\Downloads\\sc.jpg");
+    /// Paso 2
+    typeFont = setTypes(1, 0);
+    /// Paso 3
+    image = setText("San Carlos mi linda tierra, donde vive mi querer hay una",
+                    "elevada sierra donde veo el sol nacer y la luz esplendoroza", image, typeFont, 1);
+    /// Paso 4
+    saveImage(image, "C:\\Users\\Usuario\\Downloads\\output3.png");
 
     return 0;
 }
