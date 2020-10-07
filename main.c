@@ -243,5 +243,16 @@ int main() {
     image = setText("Texto solo arriba","", image, typeFont, 1);
     /// Paso 4
     saveImage(image, "C:\\Users\\Usuario\\Downloads\\output4.png");
+
+    printf("\n\n//////////////////////////////////////////////////////////////////");
+    printf("\n\tPrueba 5 - Imagen en formato bmp");
+    /// Paso 1
+    image = loadImage("C:\\Users\\Usuario\\Downloads\\hole.bmp");
+    /// Paso 2
+    typeFont = setTypes(1, 0);
+    /// Paso 3
+    image = setText("Imagen con forma","to de tipo bmp", image, typeFont, 0);
+    /// Paso 4
+    saveImage(image, "C:\\Users\\Usuario\\Downloads\\output5.png");
     return 0;
 }
