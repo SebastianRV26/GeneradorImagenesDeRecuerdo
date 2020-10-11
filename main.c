@@ -42,7 +42,7 @@ sfImage* resize(sfImage *originalImage){
  * 1. Carga de imagenes en los formatos: JPG, BMP y PNG.
  *
  * Resolución mínima: 400x400.
- * Resolución máxima: 1100x1000.
+ * Resolución máxima: 1000x1000.
  * Resize si pasa la resolución: 1000X1000.
  *
  * @param path: ruta, nombre y extención de la imagen
@@ -57,16 +57,15 @@ sfImage *loadImage(char *path){
     height = sizes.y;
 
     int minSize = 400;
-    int maxXSize = 1100;
-    int maxYSize = 1000;
+    int maxSize = 1000;
     printf("\nDimensiones de la imagen original: largo: %i, altura: %i", width, height);
     flag = 1;
     if (width < minSize || height < minSize){
         printf("\nImagen demaciado pequennia");
         flag = 0;
         return NULL;
-    } else if (width > maxXSize || height > maxYSize) {
-        printf("\nSe hizo un reajuse de dimensiones a %ix%i", maxYSize, maxYSize);
+    } else if (width > maxSize || height > maxSize) {
+        printf("\nSe hizo un reajuse de dimensiones a %ix%i", maxSize, maxSize);
         return resize(image);
     }
     return image;

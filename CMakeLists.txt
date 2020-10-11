@@ -6,4 +6,4 @@ set(CMAKE_C_STANDARD 11)
 find_package(SFML 2.5 COMPONENTS graphics system)
 add_executable(Proyecto1Lenguajes main.c)
 
-target_link_libraries(Proyecto1Lenguajes sfml-graphics sfml-system csfml-graphics csfml-window csfml-system)
+target_link_libraries(Proyecto1Lenguajes sfml-graphics sfml-system csfml-graphics csfml-system)
