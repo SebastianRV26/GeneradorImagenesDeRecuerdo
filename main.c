@@ -39,11 +39,11 @@ sfImage* resize(sfImage *originalImage){
 }
 
 /**
- * 1. Carga de imagenes en los formatos: JPG, TIFF y PNG.
+ * 1. Carga de imagenes en los formatos: JPG, BMP y PNG.
  *
- * Resolución mínima: 400.
- * Resolución máxima: 1000.
- * Resize si pasa la resolución: 1000.
+ * Resolución mínima: 400x400.
+ * Resolución máxima: 1100x1000.
+ * Resize si pasa la resolución: 1000X1000.
  *
  * @param path: ruta, nombre y extención de la imagen
  * @return image (sfImage) imagen a utilizar.
@@ -57,15 +57,16 @@ sfImage *loadImage(char *path){
     height = sizes.y;
 
     int minSize = 400;
-    int maxSize = 1000;
+    int maxXSize = 1100;
+    int maxYSize = 1000;
     printf("\nDimensiones de la imagen original: largo: %i, altura: %i", width, height);
     flag = 1;
     if (width < minSize || height < minSize){
         printf("\nImagen demaciado pequennia");
         flag = 0;
         return NULL;
-    } else if (width > maxSize || height > maxSize) {
-        printf("\nSe hizo un reajuse de dimensiones a %ix%i", maxSize, maxSize);
+    } else if (width > maxXSize || height > maxYSize) {
+        printf("\nSe hizo un reajuse de dimensiones a %ix%i", maxYSize, maxYSize);
         return resize(image);
     }
     return image;
@@ -191,33 +192,33 @@ int main() {
     /// Paso 2
     char *typeFont = setTypes(0, 0);
     /// Paso 3
-    image = setText("Memelandia", "Tenemos", image, typeFont, 1);
+    image = setText("Bill Gates", "Microsoft", image, typeFont, 1);
     /// Paso 4
     saveImage(image, "C:\\Users\\Usuario\\Downloads\\output0.png");
 
 
     printf("\n\n//////////////////////////////////////////////////////////////////");
-    printf("\n\tPrueba 1 - texto: Arial tamannio pequennio color blanco");
+    printf("\n\tPrueba 1 - texto: Arial tamannio pequennio color blanco (formato png)");
     /// Paso 1
-    image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs.jpg");
+    image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs.png");
     /// Paso 2
     typeFont = setTypes(0, 0);
     /// Paso 3
-    image = setText("Bugs Bunny", "Tenemos", image, typeFont, 0);
+    image = setText("Arial tamannio pequennio", "color blanco (formato png)", image, typeFont, 0);
     /// Paso 4
     saveImage(image, "C:\\Users\\Usuario\\Downloads\\output1.png");
 
 
     printf("\n\n//////////////////////////////////////////////////////////////////");
-    printf("\n\tPrueba 2 - texto: Times New Roman tamannio grande color negro");
+    printf("\n\tPrueba 2 - texto: Times New Roman tamannio grande color negro (formato jpg)");
     /// Paso 1
     image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs2.jpg");
     /// Paso 2
     typeFont = setTypes(1, 1);
     /// Paso 3
-    image = setText("Bugs Bunny", "Tenemos", image, typeFont, 1);
+    image = setText("Times New Roman tamannio grande", "color negro (formato jpg)", image, typeFont, 1);
     /// Paso 4
-    saveImage(image, "C:\\Users\\Usuario\\Downloads\\output2.png");
+    saveImage(image, "C:\\Users\\Usuario\\Downloads\\output2.jpg");
 
 
     printf("\n\n//////////////////////////////////////////////////////////////////");
@@ -236,7 +237,7 @@ int main() {
     printf("\n\n//////////////////////////////////////////////////////////////////");
     printf("\n\tPrueba 4 - Texto solo arriba");
     /// Paso 1
-    image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs.jpg");
+    image = loadImage("C:\\Users\\Usuario\\Downloads\\bugs.png");
     /// Paso 2
     typeFont = setTypes(1, 0);
     /// Paso 3
@@ -251,7 +252,7 @@ int main() {
     /// Paso 2
     typeFont = setTypes(1, 0);
     /// Paso 3
-    image = setText("Imagen con forma","to de tipo bmp", image, typeFont, 0);
+    image = setText("Imagen con formato","de tipo bmp", image, typeFont, 0);
     /// Paso 4
     saveImage(image, "C:\\Users\\Usuario\\Downloads\\output5.png");
     return 0;
