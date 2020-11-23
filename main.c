@@ -254,5 +254,16 @@ int main() {
     image = setText("Imagen con formato","de tipo bmp", image, typeFont, 0);
     /// Paso 4
     saveImage(image, "C:\\Users\\Usuario\\Downloads\\output5.png");
+
+    // logo
+    printf("\n\n//////////////////////////////////////////////////////////////////");
+    /// Paso 1
+    image = loadImage("C:\\Users\\Usuario\\Downloads\\c.png");
+    /// Paso 2
+    typeFont = setTypes(0, 0);
+    /// Paso 3
+    image = setText("Documentacion externa","primer proyecto lenguajes", image, typeFont, 0);
+    /// Paso 4
+    saveImage(image, "C:\\Users\\Usuario\\Downloads\\miniatura1.png");
     return 0;
 }
